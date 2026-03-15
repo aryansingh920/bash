@@ -4,7 +4,8 @@ import re
 import math
 # piweba3y.prodigy.com - - [02/Jul/1995:22:23:25 - 0400] "GET /shuttle/countdown/countdown.html HTTP/1.0" 200 3985
 
-def check_rate_limit( log_line,count:Counter,queue:deque, limit=100, window_seconds=60):
+
+def check_rate_limit(log_line, count: Counter, queue: deque, limit=2, window_seconds=60):
     """
     Processes a single log line and returns the IP if it exceeds the limit 
     within the sliding window.
@@ -22,18 +23,21 @@ def check_rate_limit( log_line,count:Counter,queue:deque, limit=100, window_seco
         # print(count,queue,limit,window_seconds)
         ip = match.group(1)
         timestamp = match.group(2)
-        time_epoch = datetime.datetime.strptime(timestamp,"%d/%b/%Y:%H:%M:%S")
-        queue.append((time_epoch,ip))
-        count[time_epoch] = ip
+        current_time = datetime.datetime.strptime(
+            timestamp, "%d/%b/%Y:%H:%M:%S")
+        queue.append((current_time, ip))
+        count[current_time] = ip
         first_element = queue[0][0]
-        last_element = queue[-1][-1]
-        first_element_second = first_element.time().second
-        last_element_second = last_element.time().second
-        
-        while (math.abs(last_element_second - first_element_second) < 60):
-            # queue.popleft()
-            pass
-        pass
+
+        while (current_time - queue[0][0]).total_seconds() > window_seconds:
+            old_time, old_ip = queue.popleft()
+            count[old_ip] -= 1
+            if count[old_ip] <= 0:
+                del count[old_ip]
+
+        # 3. Check the limit for the current IP
+        if count[ip] > limit:
+            return ip
 
     except Exception as e:
         # Handle malformed lines gracefully
@@ -44,7 +48,7 @@ def check_rate_limit( log_line,count:Counter,queue:deque, limit=100, window_seco
 
 
 def main():
-    limit = 5
+    limit = 2
     log_file_path = "/Users/aryansingh/Documents/bash/script/logs/NASA_access.log"
 
     # Initialize state outside the loop
