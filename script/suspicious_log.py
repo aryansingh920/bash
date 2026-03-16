@@ -4,7 +4,8 @@ from datetime import timedelta
 from collections import deque,defaultdict
 
 def suspicious_log(file):
-    pattern = re.compile(r'^(\S*)\s-\s-\s\[(\d{2}\/[a-zA-Z]{2,4}\/\d{4}(:\d{2}){3})\]\s"(POST\s\/login\sHTTP\/1\.[12])"\s(401)\s(\d*)')
+    pattern = re.compile(
+        r'^(\S*)\s-\s-\s\[(\d{2}\/[a-zA-Z]{2,4}\/\d{4}(:\d{2}){3})\]\s"(POST\s\/login\sHTTP\/1\.[12])"\s(401)\s(\d*)')
     queue = deque()
     map = defaultdict(deque)
     result_map = defaultdict()
@@ -13,7 +14,7 @@ def suspicious_log(file):
         for line in file:
             match = pattern.search(line)
             if match:
-                print(match.groups())
+                # print(match.groups())
                 time_epoch = dt.strptime(match.group(2),"%d/%b/%Y:%H:%M:%S")
                 ip = match.group(1)
                 # print(time_epoch)
