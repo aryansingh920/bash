@@ -1,0 +1,9 @@
+{
+    "id": 101,
+    "name": "Architect",
+    "roles": [
+        "admin",
+        "editor"
+    ],
+    "active": true
+}
