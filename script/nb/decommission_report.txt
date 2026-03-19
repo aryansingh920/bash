@@ -1,3 +1,2 @@
-Clusters identified: 2
-ID: cluster-001
+Clusters identified: 1
 ID: cluster-002
