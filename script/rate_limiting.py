@@ -10,7 +10,7 @@ def check_rate_limit(log_line, count: Counter, queue: deque, limit=2, window_sec
     Processes a single log line and returns the IP if it exceeds the limit 
     within the sliding window.
     """
-    pattern = r'^(\S+)\s-\s-\s\[(\d{2}/[a-zA-Z]{3}/\d{4}:\d{2}:\d{2}:\d{2})\s-\d{4}\]'
+    pattern = r'^(\S+)\s-\s-\s\[(\d{2}\/[a-zA-Z]{3}/\d{4}:\d{2}:\d{2}:\d{2})\s-\d{4}\]'
     
     match = re.search(pattern, log_line)
 

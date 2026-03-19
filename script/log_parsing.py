@@ -8,7 +8,7 @@ def get_top_404_hosts(file_path, top_k=5):
     """
     
     ip_pattern = r'(^[^.]+(\.[^.]+)+)\s-\s-'
-    date_pattern = r'\s-\s-\s\[(\d{2}/[a-zA-Z]+/\d{4})((:\d{2}){3})\s-(\d{4})\]'
+    date_pattern = r'\s-\s-\s\[(\d{2}\/[a-zA-Z]+/\d{4})((:\d{2}){3})\s-(\d{4})\]'
     request_pattern = r'\"([A-Z]+) \(/\S*) (HTTP\/1\.[0-2])\"'
     status_pattern = r'\s([2-5]\d{2})\s(\d+|-)$'
     
@@ -34,7 +34,7 @@ def get_top_404_hosts(file_path, top_k=5):
             #     break    
                     
                 # --- END CODE ---
-        print(counts.most_common(5))
+
         # Extract the Top K results
         return counts.most_common(top_k)
 
@@ -45,7 +45,7 @@ def get_top_404_hosts(file_path, top_k=5):
 
 if __name__ == "__main__":
     # Update this to your local path
-    LOG_FILE_PATH = "/Users/aryansingh/Documents/bash/script/logs/NASA_access.log"
+    LOG_FILE_PATH = "/Users/aryansingh/Documents/devops/script/logs/NASA_access.log"
 
     results = get_top_404_hosts(LOG_FILE_PATH)
 
