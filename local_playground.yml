@@ -1,0 +1,36 @@
+---
+- name: MacOS and Docker Local Playground
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Show my OS information
+      debug:
+        msg: "You are running {{ ansible_distribution }} version {{ ansible_distribution_version }}"
+
+    - name: Create a local playground directory
+      file:
+        path: "~/ansible_playground_folder"
+        state: directory
+        mode: '0755'
+
+    - name: Pull the Alpine Docker image
+      community.docker.docker_image:
+        name: alpine
+        source: pull
+
+    - name: Start a container named ansible_magic
+      community.docker.docker_container:
+        name: ansible_magic
+        image: alpine
+        command: sleep 1d
+        state: started
+
+    - name: Create a file inside the new container
+      community.docker.docker_container_exec:
+        container: ansible_magic
+        command: /bin/sh -c "echo 'Hello from Ansible' > /tmp/hello.txt"
+      register: result
+
+    - name: Confirm the file was created
+      debug:
+        msg: "Container task complete!"

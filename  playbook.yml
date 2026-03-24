@@ -1,0 +1,26 @@
+---
+- name: Basic Operation Playground
+  hosts: containers
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install figlet for fun
+      apt:
+        name: figlet
+        state: present
+
+    - name: Create a file with a custom message
+      copy:
+        content: "This container was provisioned by Ansible via Terraform!\n"
+        dest: /tmp/welcome.txt
+
+    - name: Run figlet to verify installation
+      shell: figlet "Ansible Rocks"
+      register: figlet_output
+
+    - name: Show figlet output
+      debug:
+        var: figlet_output.stdout
